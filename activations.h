@@ -5,6 +5,9 @@
 # include <cmath>
 # include <algorithm>
 # include <numeric>
+# include <memory>
+# include <string>
+#include <stdexcept>
 
 class Activation{
     public:
@@ -88,4 +91,17 @@ std::vector<float> SoftmaxActivation::call(std::vector<float> input){
     std::transform(exp_input.begin(), exp_input.end(), std::back_inserter(gradients), [](float x){return 1; });
 
     return output;
+}
+
+std::unique_ptr<Activation> activation_from_str(std::string name){
+    if (name == "identity"){
+        return std::make_unique<IdentityActivation>();
+    }
+    if (name == "softmax"){
+        return std::make_unique<SoftmaxActivation>();
+    }
+    if (name == "sigmoid" || name == "logistic"){
+        return std::make_unique<LogisticActivation>();
+    }
+    throw std::invalid_argument("unknown activation function name");
 }
