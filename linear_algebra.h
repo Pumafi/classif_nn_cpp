@@ -3,6 +3,17 @@
 # include <vector>
 #include <stdexcept>
 
+std::vector<float> vector_addition(std::vector<float> vector_a, std::vector<float> vector_b){
+    if (vector_a.size() != vector_b.size()){
+        throw std::invalid_argument("vectors need to be the same size for addition!");
+    }
+    std::vector<float> output(vector_a.size());
+    for (int i = 0; i < vector_a.size(); ++i){
+        output[i] = vector_a[i] + vector_b[i];
+    }
+    return output;
+}
+
 float vector_scalar_product(std::vector<float> vector_a, std::vector<float> vector_b){
     if (vector_a.size() != vector_b.size()){
         throw std::invalid_argument("vectors need to be the same size for scalar product!");
