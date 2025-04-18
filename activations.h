@@ -8,7 +8,6 @@
 
 class Activation{
     public:
-        virtual ~Activation() = default;
         virtual std::vector<float> call(std::vector<float>) = 0;
         std::vector<float> get_gradients();
     protected:
