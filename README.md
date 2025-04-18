@@ -1,1 +1,3 @@
-# classif_nn_cpp
+# Simple classification neural net in cpp
+
+For training purposes.
