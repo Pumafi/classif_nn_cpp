@@ -5,6 +5,18 @@
 # include <cmath>
 # include <algorithm>
 
+std::vector<float> vector_fill_init(int input_dim, int output_dim, float value_fill){
+    std::vector<float> output(output_dim, value_fill);
+
+    return output;
+}
+
+std::vector<std::vector<float>> matrix_2d_fill_init(int input_dim, int output_dim, float value_fill){
+    std::vector<std::vector<float>> output(input_dim);
+    std::transform(output.begin(), output.end(), output.begin(), [&](std::vector<float>){return vector_fill_init(input_dim, output_dim, value_fill); });
+    return output;
+}
+
 float glorot_uniform_values(int input_dim, int output_dim){
     std::random_device rd;
     std::mt19937 gen(rd());

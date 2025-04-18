@@ -1,7 +1,8 @@
 # pragma once
 
 # include <vector>
-#include <stdexcept>
+# include <stdexcept>
+# include <iostream>
 
 std::vector<float> vector_addition(std::vector<float> vector_a, std::vector<float> vector_b){
     if (vector_a.size() != vector_b.size()){
@@ -27,8 +28,11 @@ float vector_scalar_product(std::vector<float> vector_a, std::vector<float> vect
 
 std::vector<float> vector_matrix_multiplication(std::vector<float> vector, std::vector<std::vector<float>> matrix){
     if (vector.size() != matrix.size()){
+        std::cout << "ERROR: invalid shapes" << std::endl;
+        std::cout << "ERROR: invalid shapes. Size Matrix:" << matrix.size() << "Size vector: " << vector.size() << std::endl;
         throw std::invalid_argument("matrix must have same first dimensiosn as vector for scalar product!");
     }
+
     std::vector<float> output(matrix[0].size());
 
     for (int i = 0; i < matrix[0].size(); ++i) {
