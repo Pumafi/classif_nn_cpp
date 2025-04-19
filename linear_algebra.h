@@ -43,3 +43,25 @@ std::vector<float> vector_matrix_multiplication(std::vector<float> vector, std::
 
     return output;
 }
+
+std::vector<std::vector<float>> matrix_transpose(std::vector<std::vector<float>> matrix){
+    std::vector<std::vector<float>> output(matrix[0].size(), std::vector<float>(matrix.size()));
+    for (int i =0; i < matrix.size(); ++i){
+        for (int j = 0; j < matrix[0].size(); ++j){
+            output[j][i] = matrix[i][j];
+        }
+    }
+    return output;
+}
+
+std::vector<std::vector<float>> outer_product(std::vector<float> vector_a, std::vector<float> vector_b) {
+    std::vector<std::vector<float>> output(vector_a.size(), std::vector<float>(vector_b.size()));
+
+    for (size_t i = 0; i < vector_a.size(); ++i) {
+        for (size_t j = 0; j < vector_b.size(); ++j) {
+            output[i][j] = vector_a[i] * vector_b[j];
+        }
+    }
+
+    return output;
+}
