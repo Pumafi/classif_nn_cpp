@@ -3,6 +3,7 @@
 # include <vector>
 # include <memory>
 # include "activations.h"
+# include "optimizers.h"
 
 class Layer{
     // Abstract Layer class
@@ -10,23 +11,32 @@ class Layer{
         int input_dim;
         int output_dim;
 
-        virtual std::vector<std::vector<float>> call(std::vector<std::vector<float>> input) = 0;
+        virtual std::vector<std::vector<float>> call(const std::vector<std::vector<float>> input) = 0;
 
-        std::vector<float> get_gradients();
-        std::vector<float> call_activation(std::vector<float>);
+        std::vector<std::vector<float>> get_gradients();
+        std::vector<std::vector<float>> get_activation_gradients();
+        std::vector<float> call_activation(const std::vector<float>);
+
+        virtual std::vector<std::vector<float>> apply_gradients(const std::vector<std::vector<float>>, std::unique_ptr<Optimizer> & optimizer) = 0;
 
     protected:
         std::unique_ptr<Activation> activation;
 
-        std::vector<float> gradients;
+        std::vector<std::vector<float>> gradients;
+        std::vector<std::vector<float>> activation_gradients;
 };
 
-std::vector<float> Layer::call_activation(std::vector<float> input){
+std::vector<float> Layer::call_activation(const std::vector<float> input){
     return activation->call(input);
 }
 
-std::vector<float> Layer::get_gradients(){
-    std::vector<float> output(gradients);
+std::vector<std::vector<float>> Layer::get_gradients(){
+    std::vector<std::vector<float>> output(gradients);
+    return output;
+}
+
+std::vector<std::vector<float>> Layer::get_activation_gradients(){
+    std::vector<std::vector<float>> output(activation_gradients);
     return output;
 }
 
@@ -46,10 +56,8 @@ class WeightedLayer : public Layer{
         std::vector<std::vector<float>> get_weights_gradients();
         std::vector<float> get_bias_gradients();
 
-        virtual std::vector<float> apply_gradients(std::vector<float>) = 0;
-
     protected:
-        virtual std::vector<float> apply_weights(std::vector<float>) = 0;
+        virtual std::vector<float> apply_weights(const std::vector<float>) = 0;
 
         bool use_bias;
 
@@ -62,16 +70,14 @@ class WeightedLayer : public Layer{
 };
 
 std::vector<std::vector<float>> WeightedLayer::get_weights_gradients(){
-    std::vector<std::vector<float>> output(weights_gradients);
-    return output;
+    return weights_gradients;
 }
 
 std::vector<float> WeightedLayer::get_bias_gradients(){
     if (!use_bias){
         throw std::logic_error("Cannot call \"get_bias\" if \"use_bias=False\"");
     }
-    std::vector<float> output(bias_gradients);
-    return output;
+    return bias_gradients;
 }
 
 std::vector<std::vector<float>> WeightedLayer::get_weights(){

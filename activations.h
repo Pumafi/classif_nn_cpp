@@ -33,6 +33,7 @@ class IdentityActivation : public Activation{
 std::vector<float> IdentityActivation::call(std::vector<float> input){
     std::vector<float> output(input.begin(), input.end());
 
+    gradients.clear();
     std::transform(input.begin(), input.end(), std::back_inserter(gradients), [](float x){return 1; });    
 
     return output;
