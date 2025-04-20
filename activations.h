@@ -64,6 +64,31 @@ std::vector<float> LogisticActivation::call(std::vector<float> input){
     return output;
 }
 
+class ReLU : public Activation{   
+    /*
+    Logistic activation function, also called sigmoid function.
+    Simple implementation that applies the function element wise to the input vector and compute gradient.
+    */  
+    public:
+        std::vector<float> call(std::vector<float>);   
+};
+
+std::vector<float> ReLU::call(std::vector<float> input){
+    /*
+    Apply the rectified linear unit activation element wise to the input vector.
+    */
+    std::vector<float> output;
+
+    gradients.clear();
+    // Compute gradient in the forward pass (TODO option to not do that)
+    std::transform(input.begin(), input.end(), std::back_inserter(gradients), [](float x){return x > 0 ? 1. : 0.; });
+
+    // Compute output
+    std::transform(input.begin(), input.end(), std::back_inserter(output), [](float x){return x > 0 ? x : 0.; });
+
+    return output;
+}
+
 class SoftmaxActivation : public Activation{
     /*
     Softmax activation function.
@@ -100,6 +125,9 @@ std::unique_ptr<Activation> activation_from_str(std::string name){
     }
     if (name == "softmax"){
         return std::make_unique<SoftmaxActivation>();
+    }
+    if (name == "relu" || name == "ReLU"){
+        return std::make_unique<ReLU>();
     }
     if (name == "sigmoid" || name == "logistic"){
         return std::make_unique<LogisticActivation>();
