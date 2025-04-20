@@ -18,12 +18,10 @@ class Model{
         void fit(std::vector<std::vector<float>>, std::vector<std::vector<float>>, int);
         void fit(std::vector<std::vector<float>> x_train, std::vector<std::vector<float>> y_train, int epochs, int batch_size);
 
-        std::unique_ptr<Optimizer> optimizer;
-
     protected:
+        std::unique_ptr<Optimizer> optimizer;
         void backpropagation();
         float compute_loss(const std::vector<std::vector<float>> y_true, const std::vector<std::vector<float>> y_pred);
-
         
         std::vector<Layer*> layers_list;
 
