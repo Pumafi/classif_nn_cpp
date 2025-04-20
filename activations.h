@@ -66,7 +66,7 @@ std::vector<float> LogisticActivation::call(std::vector<float> input){
 
 class ReLU : public Activation{   
     /*
-    Logistic activation function, also called sigmoid function.
+    ReLU activation function, also called sigmoid function.
     Simple implementation that applies the function element wise to the input vector and compute gradient.
     */  
     public:
@@ -85,6 +85,37 @@ std::vector<float> ReLU::call(std::vector<float> input){
 
     // Compute output
     std::transform(input.begin(), input.end(), std::back_inserter(output), [](float x){return x > 0 ? x : 0.; });
+
+    return output;
+}
+
+class LeakyReLU : public Activation{   
+    /*
+    LeakyReLU activation function, also called sigmoid function.
+    Simple implementation that applies the function element wise to the input vector and compute gradient.
+    */  
+    public:
+        std::vector<float> call(std::vector<float>);   
+        LeakyReLU(float);
+    protected:
+        float leaky_parameter;
+};
+
+LeakyReLU::LeakyReLU(float leaky_parameter_) : leaky_parameter(leaky_parameter_) {};
+
+std::vector<float> LeakyReLU::call(std::vector<float> input){
+    /*
+    Apply the leaky rectified linear unit activation element wise to the input vector.
+    TODO: configurable leaky parameter
+    */
+    std::vector<float> output;
+
+    gradients.clear();
+    // Compute gradient in the forward pass (TODO option to not do that)
+    std::transform(input.begin(), input.end(), std::back_inserter(gradients), [&](float x){return x > 0 ? 1. : leaky_parameter; });
+
+    // Compute output
+    std::transform(input.begin(), input.end(), std::back_inserter(output), [&](float x){return x > 0 ? x : leaky_parameter * x; });
 
     return output;
 }
@@ -128,6 +159,9 @@ std::unique_ptr<Activation> activation_from_str(std::string name){
     }
     if (name == "relu" || name == "ReLU"){
         return std::make_unique<ReLU>();
+    }
+    if (name == "leakyrelu" || name == "LeakyReLU"){
+        return std::make_unique<LeakyReLU>(0.2);
     }
     if (name == "sigmoid" || name == "logistic"){
         return std::make_unique<LogisticActivation>();
