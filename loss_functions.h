@@ -43,10 +43,7 @@ float BinaryCrossEntropyLoss::call(const std::vector<float> y_true, const std::v
     for (size_t i = 0; i < y_true.size(); ++i) {
         float y = y_true[i];
         float y_hat = y_pred[i];
-        //std::cout << "       debug2 y " << y << std::endl;
         float p = std::min(0.999f, std::max(epsilon, y_hat));
-        //std::cout << "       debug2 p " << p << std::endl;
-        //std::cout << "       debug2 val " << 1.f - epsilon << std::endl;
 
         loss += -y * std::log(p) - (1. - y) * std::log(1. - p);
 

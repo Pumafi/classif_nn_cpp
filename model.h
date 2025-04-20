@@ -49,7 +49,6 @@ float Model::compute_loss(const std::vector<std::vector<float>> y_true, const st
             throw std::logic_error("Loss function undefined");
         }
         loss += optimizer->loss_function->call(y_true[b], y_pred[b]);
-        //std::cout << "   debug1 " << loss << std::endl;
         loss_gradient.push_back(optimizer->loss_function->get_loss_gradient());
     }
     loss /= y_pred.size();
@@ -82,7 +81,6 @@ std::vector<std::vector<float>> Model::call(std::vector<std::vector<float>> inpu
 float Model::training_step(std::vector<std::vector<float>> x_batch, std::vector<std::vector<float>> y_batch) {
     std::vector<std::vector<float>> predictions = call(x_batch);
     float loss = compute_loss(y_batch, predictions);
-    //std::cout << " debug " << loss << std::endl;
     backpropagation();
     return loss;
 }
