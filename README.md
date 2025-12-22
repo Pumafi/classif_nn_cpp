@@ -1,5 +1,5 @@
 # Simple classification neural net in c++
-## Tests include MNIST Classification and XOR Classification
+## Tests include MNIST Classification and XOR Gate
 
 Very simple implementation, made in 3 days, of a classification neural network in C++.
 
